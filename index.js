@@ -4,9 +4,14 @@ const operators = document.querySelectorAll(".operator")
 const clear = document.getElementById("clear")
 const del = document.getElementById("delete")
 
+let operator = ""
+let firstNumber = ""
+let currentInput = ""
+let expression = ""
 
 function handleNumbers(button) {
-        display.value += button.textContent
+        currentInput += button.textContent
+        display.value = expression + currentInput
 }
  
 numbers.forEach(button => {
@@ -14,17 +19,52 @@ numbers.forEach(button => {
 })
 
 function handleOperators(button) {
-    display.value += button.textContent
+    const op= button.textContent
+    if (op === "=") {
+    if (firstNumber && operator && currentInput) {
+        display.value = calculate(firstNumber, operator, currentInput)
+        currentInput = display.value
+        firstNumber = ""
+        operator = ""
+        expression = ""
+}
+} else {  
+    if (currentInput) {
+        firstNumber = currentInput
+        operator = op
+        expression += currentInput + " " + operator + " "
+        currentInput = ""
+        display.value = expression
+        }
+    }
+}
+
+function calculate(a, op, b) {
+    a = parseFloat(a)
+    b = parseFloat(b)
+    switch (op) {
+        case "+": return a + b
+        case "-": return a - b
+        case "*": return a * b
+        case "/": return b === 0 ? "error": a/b
+    }
 }
 
 operators.forEach(button => {
-    button.addEventListener("click", () => handleOperators(button))
+    button.addEventListener("click", () => handleOperators(button));
 })
 
+
 clear.addEventListener("click", function() {
-    display.value = display.value.slice(0, -1)
+    currentInput = ""
+    firstNumber = ""
+    operator = ""
+    expression = ""
+    display.value = ""
 })
 
 del.addEventListener("click", function() {
-    display.value = display.value = ""
+    currentInput = currentInput.slice(0, -1)
+    display.value = expression + currentInput
+    
 })
