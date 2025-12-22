@@ -4,7 +4,6 @@ const operators = document.querySelectorAll(".operator")
 const clear = document.getElementById("clear")
 const del = document.getElementById("delete")
 
-const clearNumber = 1
 
 function handleNumbers(button) {
         display.value += button.textContent
