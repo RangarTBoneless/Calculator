@@ -8,10 +8,16 @@ let operator = ""
 let firstNumber = ""
 let currentInput = ""
 let expression = ""
+let lastPressedEquals = false
 
 function handleNumbers(button) {
+    if (lastPressedEquals) {
+        currentInput = ""
+        expression = ""
+        lastPressedEquals = false
+    }
         currentInput += button.textContent
-        display.value = expression + currentInput
+        updateDisplay()
 }
  
 numbers.forEach(button => {
@@ -27,6 +33,7 @@ function handleOperators(button) {
         firstNumber = ""
         operator = ""
         expression = ""
+        lastPressedEquals = true
 }
 } else {  
     if (currentInput) {
@@ -34,7 +41,8 @@ function handleOperators(button) {
         operator = op
         expression += currentInput + " " + operator + " "
         currentInput = ""
-        display.value = expression
+        updateDisplay()
+        lastPressedEquals = false
         }
     }
 }
@@ -46,7 +54,7 @@ function calculate(a, op, b) {
         case "+": return a + b
         case "-": return a - b
         case "*": return a * b
-        case "/": return b === 0 ? "error": a/b
+        case "/": return b === 0 ? "Error": a/b
     }
 }
 
@@ -68,3 +76,12 @@ del.addEventListener("click", function() {
     display.value = expression + currentInput
     
 })
+
+function updateDisplay() {
+    display.value = expression + currentInput
+    if ((expression + currentInput).length > 10) {
+        display.style.fontSize = "28px"
+    } else {
+        display.style.fontSize = "44px"
+    }
+}
